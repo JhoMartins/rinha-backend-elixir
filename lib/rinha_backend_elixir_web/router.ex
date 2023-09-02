@@ -5,7 +5,10 @@ defmodule RinhaBackendElixirWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", RinhaBackendElixirWeb do
+  scope "/pessoas", RinhaBackendElixirWeb do
     pipe_through :api
+
+    resources "/", PessoasController, only: [:index, :show, :create]
+    get "/contagem-pessoas", PessoasController, :count
   end
 end
