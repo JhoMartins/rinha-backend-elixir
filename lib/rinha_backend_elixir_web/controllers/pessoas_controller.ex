@@ -12,4 +12,10 @@ defmodule RinhaBackendElixirWeb.PessoasController do
       |> send_resp(:created, "")
     end
   end
+
+  def show(conn, %{"id" => id}) do
+    pessoa = Pessoas.get_pessoa!(id)
+
+    json(conn, pessoa)
+  end
 end
