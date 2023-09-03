@@ -11,5 +11,7 @@ defmodule RinhaBackendElixir.Repo.Migrations.CreatePessoas do
 
       timestamps()
     end
+
+    create unique_index(:pessoas, :apelido)
   end
 end
