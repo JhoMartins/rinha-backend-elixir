@@ -21,7 +21,12 @@ defmodule RinhaBackendElixir.PessoasTest do
     end
 
     test "create_pessoa/1 with valid data creates a pessoa" do
-      valid_attrs = %{stack: "some stack", nome: "some nome", apelido: "some apelido", nascimento: "some nascimento"}
+      valid_attrs = %{
+        stack: "some stack",
+        nome: "some nome",
+        apelido: "some apelido",
+        nascimento: "some nascimento"
+      }
 
       assert {:ok, %Pessoa{} = pessoa} = Pessoas.create_pessoa(valid_attrs)
       assert pessoa.stack == "some stack"
@@ -36,7 +41,13 @@ defmodule RinhaBackendElixir.PessoasTest do
 
     test "update_pessoa/2 with valid data updates the pessoa" do
       pessoa = pessoa_fixture()
-      update_attrs = %{stack: "some updated stack", nome: "some updated nome", apelido: "some updated apelido", nascimento: "some updated nascimento"}
+
+      update_attrs = %{
+        stack: "some updated stack",
+        nome: "some updated nome",
+        apelido: "some updated apelido",
+        nascimento: "some updated nascimento"
+      }
 
       assert {:ok, %Pessoa{} = pessoa} = Pessoas.update_pessoa(pessoa, update_attrs)
       assert pessoa.stack == "some updated stack"

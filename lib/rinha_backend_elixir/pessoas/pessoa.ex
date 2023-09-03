@@ -16,7 +16,7 @@ defmodule RinhaBackendElixir.Pessoas.Pessoa do
   @doc false
   def changeset(pessoa, attrs) do
     pessoa
-    |> cast(attrs,[:stack, :nome, :apelido, :nascimento])
+    |> cast(attrs, [:stack, :nome, :apelido, :nascimento])
     |> validate_required([:nome, :apelido, :nascimento])
     |> validate_length(:nome, max: 100)
     |> validate_length(:nome, max: 32)
@@ -26,7 +26,7 @@ defmodule RinhaBackendElixir.Pessoas.Pessoa do
   defp validate_date_format(field, value) do
     case Date.from_iso8601(value) do
       {:ok, _date} -> []
-      {:error, reason} -> ["#{field}": reason]
+      {:error, reason} -> ["#{field}": to_string(reason)]
     end
   end
 end
