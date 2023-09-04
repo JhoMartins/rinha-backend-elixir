@@ -55,50 +55,5 @@ defmodule RinhaBackendElixir.Pessoas do
     |> Repo.insert()
   end
 
-  @doc """
-  Updates a pessoa.
-
-  ## Examples
-
-      iex> update_pessoa(pessoa, %{field: new_value})
-      {:ok, %Pessoa{}}
-
-      iex> update_pessoa(pessoa, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_pessoa(%Pessoa{} = pessoa, attrs) do
-    pessoa
-    |> Pessoa.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a pessoa.
-
-  ## Examples
-
-      iex> delete_pessoa(pessoa)
-      {:ok, %Pessoa{}}
-
-      iex> delete_pessoa(pessoa)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_pessoa(%Pessoa{} = pessoa) do
-    Repo.delete(pessoa)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking pessoa changes.
-
-  ## Examples
-
-      iex> change_pessoa(pessoa)
-      %Ecto.Changeset{data: %Pessoa{}}
-
-  """
-  def change_pessoa(%Pessoa{} = pessoa, attrs \\ %{}) do
-    Pessoa.changeset(pessoa, attrs)
-  end
+  def count_pessoas, do: Repo.aggregate(Pessoa, :count)
 end

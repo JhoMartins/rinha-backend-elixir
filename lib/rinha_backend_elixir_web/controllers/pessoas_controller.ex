@@ -5,6 +5,12 @@ defmodule RinhaBackendElixirWeb.PessoasController do
 
   action_fallback RinhaBackendElixirWeb.FallbackController
 
+  def index(conn, _params) do
+    pessoas = Pessoas.list_pessoas()
+
+    json(conn, pessoas)
+  end
+
   def create(conn, params) do
     with {:ok, pessoa} <- Pessoas.create_pessoa(params) do
       conn
@@ -17,5 +23,11 @@ defmodule RinhaBackendElixirWeb.PessoasController do
     pessoa = Pessoas.get_pessoa!(id)
 
     json(conn, pessoa)
+  end
+
+  def count(conn, _params) do
+    count = Pessoas.count_pessoas()
+
+    send_resp(conn, :ok, "#{count}")
   end
 end
