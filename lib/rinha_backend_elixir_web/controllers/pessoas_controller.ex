@@ -11,7 +11,9 @@ defmodule RinhaBackendElixirWeb.PessoasController do
     json(conn, pessoas)
   end
 
-  def create(conn, params) do
+  def create(conn, %{"stack" => stack} = params) do
+    params = Map.put(params, "stack_array", stack)
+
     with {:ok, pessoa} <- Pessoas.create_pessoa(params) do
       conn
       |> put_resp_header("Location", "/pessoas/" <> pessoa.id)
