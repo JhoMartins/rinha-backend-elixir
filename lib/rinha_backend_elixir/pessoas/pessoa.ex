@@ -3,7 +3,6 @@ defmodule RinhaBackendElixir.Pessoas.Pessoa do
   import Ecto.Changeset
 
   @primary_key {:id, Ecto.UUID, autogenerate: true}
-  @derive {Jason.Encoder, only: [:id, :stack, :nome, :apelido, :nascimento]}
 
   schema "pessoas" do
     field :stack, :string

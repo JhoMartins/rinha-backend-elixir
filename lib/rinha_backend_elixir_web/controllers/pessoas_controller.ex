@@ -8,7 +8,7 @@ defmodule RinhaBackendElixirWeb.PessoasController do
   def index(conn, _params) do
     pessoas = Pessoas.list_pessoas()
 
-    json(conn, pessoas)
+    render(conn, :index, pessoas: pessoas)
   end
 
   def create(conn, %{"stack" => stack} = params) do
@@ -24,7 +24,7 @@ defmodule RinhaBackendElixirWeb.PessoasController do
   def show(conn, %{"id" => id}) do
     pessoa = Pessoas.get_pessoa!(id)
 
-    json(conn, pessoa)
+    render(conn, :show, pessoa: pessoa)
   end
 
   def count(conn, _params) do
