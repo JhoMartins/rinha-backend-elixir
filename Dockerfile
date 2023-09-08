@@ -15,11 +15,9 @@ RUN mix compile
 
 RUN mix release
 
-RUN echo $(ls)
-
 FROM alpine:3.17 as release
 
-RUN apk add --update --no-cache ncurses-libs libstdc++
+RUN apk add --update --no-cache ncurses-libs libstdc++ bash
 
 WORKDIR /app
 
@@ -27,8 +25,4 @@ ENV MIX_ENV="prod"
 
 COPY --from=builder /app/_build/${MIX_ENV}/rel/rinha_backend_elixir ./
 
-RUN echo $(ls bin/rinha_backend_elixir)
-
-EXPOSE 4000
-
-CMD ["/app/bin/rinha_backend_elixir start"]
+CMD ["sh", "-c", "PHX_SERVER=true exec ./bin/rinha_backend_elixir start"]
