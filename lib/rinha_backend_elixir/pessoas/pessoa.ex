@@ -35,9 +35,10 @@ defmodule RinhaBackendElixir.Pessoas.Pessoa do
   end
 
   defp validate_stack(_field, stack) when is_list(stack) do
-    is_valid_stack = Enum.all?(stack, fn stack ->
-      is_binary(stack) && String.length(stack) <= 32
-    end)
+    is_valid_stack =
+      Enum.all?(stack, fn stack ->
+        is_binary(stack) && String.length(stack) <= 32
+      end)
 
     if is_valid_stack, do: [], else: [stack: "invalid format"]
   end
@@ -45,5 +46,5 @@ defmodule RinhaBackendElixir.Pessoas.Pessoa do
   defp validate_stack(_, _), do: []
 
   defp stack_to_string(stack) when is_list(stack), do: Enum.join(stack, " ")
-  defp stack_to_string(_) , do: nil
+  defp stack_to_string(_), do: nil
 end

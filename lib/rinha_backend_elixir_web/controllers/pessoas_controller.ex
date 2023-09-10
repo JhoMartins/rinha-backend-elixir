@@ -2,13 +2,16 @@ defmodule RinhaBackendElixirWeb.PessoasController do
   use RinhaBackendElixirWeb, :controller
 
   alias RinhaBackendElixir.Pessoas
+  alias RinhaBackendElixir.Pessoas.SearchInput
 
   action_fallback RinhaBackendElixirWeb.FallbackController
 
-  def index(conn, _params) do
-    pessoas = Pessoas.list_pessoas()
+  def index(conn, params) do
+    with {:ok, search_input} <- SearchInput.build(params) do
+      pessoas = Pessoas.search_pessoas(search_input.t)
 
-    render(conn, :index, pessoas: pessoas)
+      render(conn, :index, pessoas: pessoas)
+    end
   end
 
   def create(conn, %{"stack" => stack} = params) do
