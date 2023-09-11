@@ -7,10 +7,14 @@ defmodule RinhaBackendElixirWeb.PessoasController do
   action_fallback RinhaBackendElixirWeb.FallbackController
 
   def index(conn, params) do
-    with {:ok, search_input} <- SearchInput.build(params) do
-      pessoas = Pessoas.search_pessoas(search_input.t)
+    case SearchInput.build(params) do
+      {:ok, search_input} ->
+        pessoas = Pessoas.search_pessoas(search_input.t)
 
-      render(conn, :index, pessoas: pessoas)
+        render(conn, :index, pessoas: pessoas)
+
+      {:error, changeset} ->
+        {:invalid, changeset}
     end
   end
 
@@ -34,5 +38,11 @@ defmodule RinhaBackendElixirWeb.PessoasController do
     count = Pessoas.count_pessoas()
 
     send_resp(conn, :ok, "#{count}")
+  end
+
+  def validate_params(struct, params) do
+    with %Ecto.Changeset{valid?: false} = changeset <- struct.build(params) do
+      {:invalid, changeset}
+    end
   end
 end
