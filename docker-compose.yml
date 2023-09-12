@@ -12,6 +12,12 @@ services:
       SECRET_KEY_BASE: 1Syx0lXQyk/14OAbwdLwFr7a7loSGc8z/ImnU+93HRdSSO2r31Y8gccUURgkPEd0
     expose:
       - "4000"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.175'
+          memory: '0.5GB'
+
 
   api2:
     <<: *api
@@ -27,11 +33,16 @@ services:
       - ./priv/repo/schema.sql:/docker-entrypoint-initdb.d/schema.sql
       - ./postgresql.conf:/docker-entrypoint-initdb.d/postgresql.conf
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: [ "CMD", "pg_isready", "-q", "-d", "rinha_backend_elixir_prod", "-U", "postgres" ]
       interval: 5s
       timeout: 5s
       retries: 20
       start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: '1.5GB'
 
   nginx:
     image: nginx:latest
@@ -42,6 +53,11 @@ services:
       - api2
     ports:
       - "9999:9999"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.15'
+          memory: '0.5GB'
 
 networks:
   default:
