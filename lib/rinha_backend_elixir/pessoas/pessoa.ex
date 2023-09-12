@@ -20,7 +20,7 @@ defmodule RinhaBackendElixir.Pessoas.Pessoa do
     |> cast(attrs, [:stack_array, :nome, :apelido, :nascimento])
     |> validate_required([:nome, :apelido, :nascimento])
     |> validate_length(:nome, max: 100)
-    |> validate_length(:nome, max: 32)
+    |> validate_length(:apelido, max: 32)
     |> validate_change(:nascimento, &validate_date_format/2)
     |> validate_change(:stack_array, &validate_stack/2)
     |> put_change(:stack, stack_to_string(attrs["stack"]))
