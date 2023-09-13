@@ -13,10 +13,8 @@ defmodule RinhaBackendElixir.Pessoas do
   end
 
   def search_pessoas(term) do
-    like = "%#{term}%"
-
     from(p in Pessoa,
-      where: ilike(p.nome, ^like) or ilike(p.apelido, ^like) or ilike(p.stack, ^like),
+      where: ilike(p.searchable, ^"%#{term}%"),
       limit: 50
     )
     |> Repo.all()

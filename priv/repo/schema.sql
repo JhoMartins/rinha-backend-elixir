@@ -213,6 +213,20 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pg_trgm; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -228,7 +242,8 @@ CREATE TABLE public.pessoas (
     nascimento character varying(10),
     stack character varying(255),
     inserted_at timestamp(0) without time zone NOT NULL,
-    updated_at timestamp(0) without time zone NOT NULL
+    updated_at timestamp(0) without time zone NOT NULL,
+    searchable text GENERATED ALWAYS AS (lower((((nome)::text || (apelido)::text) || (stack)::text))) STORED
 );
 
 
@@ -263,6 +278,13 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: idx_pessoas_searchable; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_pessoas_searchable ON public.pessoas USING gist (searchable public.gist_trgm_ops (siglen='64'));
+
+
+--
 -- Name: pessoas_apelido_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -271,9 +293,5 @@ CREATE UNIQUE INDEX pessoas_apelido_index ON public.pessoas USING btree (apelido
 
 --
 -- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database cluster dump complete
 --
 

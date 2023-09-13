@@ -9,6 +9,7 @@ services:
       - postgres
     environment:
       DATABASE_URL: ecto://postgres:postgres@postgres/rinha_backend_elixir_prod
+      POOL_SIZE: 40 
       SECRET_KEY_BASE: 1Syx0lXQyk/14OAbwdLwFr7a7loSGc8z/ImnU+93HRdSSO2r31Y8gccUURgkPEd0
     expose:
       - "4000"
