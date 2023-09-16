@@ -11,14 +11,14 @@ services:
       DATABASE_URL: ecto://postgres:postgres@postgres/rinha_backend_elixir_prod
       POOL_SIZE: 40 
       SECRET_KEY_BASE: 1Syx0lXQyk/14OAbwdLwFr7a7loSGc8z/ImnU+93HRdSSO2r31Y8gccUURgkPEd0
+      REDIS_URL: redis://redis:6379
     expose:
       - "4000"
     deploy:
       resources:
         limits:
-          cpus: '0.175'
-          memory: '0.5GB'
-
+          cpus: '0.14'
+          memory: '0.4GB'
 
   api2:
     <<: *api
@@ -42,8 +42,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.0'
-          memory: '1.5GB'
+          cpus: '0.9'
+          memory: '1.4GB'
 
   nginx:
     image: nginx:latest
@@ -59,6 +59,17 @@ services:
         limits:
           cpus: '0.15'
           memory: '0.5GB'
+
+  redis:
+    image: redis:alpine
+    command: redis-server --save "" --appendonly no --maxclients 20000
+    ports:
+      - 6379:6379
+    deploy:
+      resources:
+        limits:
+          cpus: '0.15'
+          memory: '0.3GB'
 
 networks:
   default:

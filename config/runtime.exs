@@ -94,4 +94,6 @@ if config_env() == :prod do
   #       force_ssl: [hsts: true]
   #
   # Check `Plug.SSL` for all available options in `force_ssl`.
+
+  config :rinha_backend_elixir, redis: [url: System.fetch_env!("REDIS_URL")]
 end
