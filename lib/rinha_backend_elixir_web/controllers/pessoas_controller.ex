@@ -1,7 +1,7 @@
 defmodule RinhaBackendElixirWeb.PessoasController do
   use RinhaBackendElixirWeb, :controller
 
-  alias RinhaBackendElixir.Pessoas
+  alias RinhaBackendElixir.{Pessoas, Redis}
   alias RinhaBackendElixir.Pessoas.SearchInput
 
   action_fallback RinhaBackendElixirWeb.FallbackController
@@ -29,9 +29,22 @@ defmodule RinhaBackendElixirWeb.PessoasController do
   end
 
   def show(conn, %{"id" => id}) do
-    pessoa = Pessoas.get_pessoa!(id)
+    json =
+      with nil <- Redis.get!(id) do
+        json =
+          id
+          |> Pessoas.get_pessoa!()
+          |> Map.update!(:stack, &String.split/1)
+          |> Jason.encode!()
 
-    render(conn, :show, pessoa: pessoa)
+        spawn(fn -> Redis.set(id, json) end)
+
+        json
+      end
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, json)
   end
 
   def count(conn, _params) do

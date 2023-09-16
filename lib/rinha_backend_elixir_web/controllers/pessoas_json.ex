@@ -1,8 +1,6 @@
 defmodule RinhaBackendElixirWeb.PessoasJSON do
   def index(%{pessoas: pessoas}), do: for(pessoa <- pessoas, do: data(pessoa))
 
-  def show(%{pessoa: pessoa}), do: data(pessoa)
-
   defp data(pessoa) do
     %{
       id: pessoa.id,

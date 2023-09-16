@@ -15,7 +15,9 @@ defmodule RinhaBackendElixir.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: RinhaBackendElixir.PubSub},
       # Start the Endpoint (http/https)
-      RinhaBackendElixirWeb.Endpoint
+      RinhaBackendElixirWeb.Endpoint,
+      # Star redis client
+      {Redix, {Application.get_env(:rinha_backend_elixir, :redis)[:url], [name: :redix]}}
       # Start a worker by calling: RinhaBackendElixir.Worker.start_link(arg)
       # {RinhaBackendElixir.Worker, arg}
     ]
