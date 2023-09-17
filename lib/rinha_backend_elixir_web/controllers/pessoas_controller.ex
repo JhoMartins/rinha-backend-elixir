@@ -11,7 +11,7 @@ defmodule RinhaBackendElixirWeb.PessoasController do
       {:ok, search_input} ->
         pessoas = Pessoas.search_pessoas(search_input.t)
 
-        render(conn, :index, pessoas: pessoas)
+        json(conn, pessoas)
 
       {:error, changeset} ->
         {:invalid, changeset}
@@ -40,7 +40,7 @@ defmodule RinhaBackendElixirWeb.PessoasController do
 
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(200, json)
+    |> send_resp(:ok, json)
   end
 
   def count(conn, _params) do
