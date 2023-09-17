@@ -18,10 +18,10 @@ defmodule RinhaBackendElixirWeb.PessoasController do
     end
   end
 
-  def create(conn, %{"stack" => stack} = params) do
-    params = Map.put(params, "stack_array", stack)
-
+  def create(conn, params) do
     with {:ok, pessoa} <- Pessoas.create_pessoa(params) do
+      Redis.set(pessoa.id, pessoa)
+
       conn
       |> put_resp_header("Location", "/pessoas/" <> pessoa.id)
       |> send_resp(:created, "")
@@ -31,15 +31,11 @@ defmodule RinhaBackendElixirWeb.PessoasController do
   def show(conn, %{"id" => id}) do
     json =
       with nil <- Redis.get!(id) do
-        json =
-          id
-          |> Pessoas.get_pessoa!()
-          |> Map.update!(:stack, &String.split/1)
-          |> Jason.encode!()
+        pessoa_json = id |> Pessoas.get_pessoa!() |> Jason.encode!()
 
-        spawn(fn -> Redis.set(id, json) end)
+        spawn(fn -> Redis.set(id, pessoa_json) end)
 
-        json
+        pessoa_json
       end
 
     conn
