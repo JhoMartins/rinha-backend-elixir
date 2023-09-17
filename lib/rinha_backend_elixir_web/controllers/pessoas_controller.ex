@@ -2,19 +2,14 @@ defmodule RinhaBackendElixirWeb.PessoasController do
   use RinhaBackendElixirWeb, :controller
 
   alias RinhaBackendElixir.{Pessoas, Redis}
-  alias RinhaBackendElixir.Pessoas.SearchInput
 
   action_fallback RinhaBackendElixirWeb.FallbackController
 
   def index(conn, params) do
-    case SearchInput.build(params) do
-      {:ok, search_input} ->
-        pessoas = Pessoas.search_pessoas(search_input.t)
+    with {:ok, search} <- Pessoas.build_search(params) do
+      pessoas = Pessoas.search_pessoas(search.t)
 
-        json(conn, pessoas)
-
-      {:error, changeset} ->
-        {:invalid, changeset}
+      json(conn, pessoas)
     end
   end
 
@@ -26,6 +21,8 @@ defmodule RinhaBackendElixirWeb.PessoasController do
       |> put_resp_header("Location", "/pessoas/" <> pessoa.id)
       |> send_resp(:created, "")
     end
+  rescue
+    _ -> send_resp(conn, :unprocessable_entity, "")
   end
 
   def show(conn, %{"id" => id}) do

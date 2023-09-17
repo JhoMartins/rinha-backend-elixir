@@ -25,7 +25,6 @@ defmodule RinhaBackendElixir.Pessoas.Pessoa do
     |> validate_length(:apelido, max: 32)
     |> validate_change(:nascimento, &validate_date_format/2)
     |> validate_change(:stack, &validate_stack/2)
-    |> unique_constraint(:apelido)
   end
 
   defp validate_date_format(field, value) do

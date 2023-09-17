@@ -6,7 +6,9 @@ defmodule RinhaBackendElixir.Pessoas do
   import Ecto.Query, warn: false
   alias RinhaBackendElixir.Repo
 
-  alias RinhaBackendElixir.Pessoas.Pessoa
+  alias RinhaBackendElixir.Pessoas.{Pessoa, SearchInput}
+
+  defdelegate build_search(attrs), to: SearchInput, as: :build
 
   def list_pessoas do
     Repo.all(Pessoa)
