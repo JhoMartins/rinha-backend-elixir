@@ -241,8 +241,6 @@ CREATE TABLE public.pessoas (
     apelido character varying(32),
     nascimento character varying(10),
     stack character varying(255),
-    inserted_at timestamp(0) without time zone NOT NULL,
-    updated_at timestamp(0) without time zone NOT NULL,
     searchable text GENERATED ALWAYS AS (lower((((nome)::text || (apelido)::text) || (stack)::text))) STORED
 );
 

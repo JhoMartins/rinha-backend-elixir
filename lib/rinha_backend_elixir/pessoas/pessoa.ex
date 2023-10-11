@@ -4,7 +4,7 @@ defmodule RinhaBackendElixir.Pessoas.Pessoa do
 
   alias RinhaBackendElixir.Ecto.Types.ListToString
 
-  @primary_key {:id, Ecto.UUID, autogenerate: true}
+  @primary_key {:id, Ecto.UUID, autogenerate: false}
   @derive {Jason.Encoder, only: [:id, :stack, :nome, :apelido, :nascimento]}
 
   schema "pessoas" do
@@ -12,19 +12,23 @@ defmodule RinhaBackendElixir.Pessoas.Pessoa do
     field :nome, :string
     field :apelido, :string
     field :nascimento, :string
-
-    timestamps()
   end
 
   @doc false
   def changeset(pessoa, attrs) do
     pessoa
-    |> cast(attrs, [:stack, :nome, :apelido, :nascimento])
+    |> cast(attrs, [:id, :stack, :nome, :apelido, :nascimento])
     |> validate_required([:nome, :apelido, :nascimento])
     |> validate_length(:nome, max: 100)
     |> validate_length(:apelido, max: 32)
     |> validate_change(:nascimento, &validate_date_format/2)
     |> validate_change(:stack, &validate_stack/2)
+  end
+
+  def build(attrs) do
+    %__MODULE__{}
+    |> changeset(attrs)
+    |> apply_action(:insert)
   end
 
   defp validate_date_format(field, value) do

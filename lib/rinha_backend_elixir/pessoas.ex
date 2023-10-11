@@ -9,6 +9,7 @@ defmodule RinhaBackendElixir.Pessoas do
   alias RinhaBackendElixir.Pessoas.{Pessoa, SearchInput}
 
   defdelegate build_search(attrs), to: SearchInput, as: :build
+  defdelegate build_pessoa(attrs), to: Pessoa, as: :build
 
   def list_pessoas do
     Repo.all(Pessoa)
@@ -29,6 +30,10 @@ defmodule RinhaBackendElixir.Pessoas do
     |> Pessoa.changeset(attrs)
     |> Repo.insert()
   end
+
+  def bulk_insert(pessoas), do: Repo.insert_all(Pessoa, pessoas, on_conflict: :nothing)
+
+  def insert_pessoa(pessoa), do: Repo.insert(pessoa, on_conflict: :nothing)
 
   def count_pessoas, do: Repo.aggregate(Pessoa, :count)
 end

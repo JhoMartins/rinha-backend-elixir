@@ -8,8 +8,6 @@ defmodule RinhaBackendElixir.Repo.Migrations.CreatePessoas do
       add :apelido, :string, size: 32
       add :nascimento, :string, size: 10
       add :stack, :string
-
-      timestamps()
     end
 
     create unique_index(:pessoas, :apelido)

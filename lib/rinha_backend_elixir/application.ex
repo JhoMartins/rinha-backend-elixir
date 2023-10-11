@@ -5,6 +5,8 @@ defmodule RinhaBackendElixir.Application do
 
   use Application
 
+  alias RinhaBackendElixir.Workers.BatchInsert
+
   @impl true
   def start(_type, _args) do
     children = [
@@ -17,7 +19,9 @@ defmodule RinhaBackendElixir.Application do
       # Start the Endpoint (http/https)
       RinhaBackendElixirWeb.Endpoint,
       # Star redis client
-      {Redix, {Application.get_env(:rinha_backend_elixir, :redis)[:url], [name: :redix]}}
+      {Redix, {Application.get_env(:rinha_backend_elixir, :redis)[:url], [name: :redix]}},
+
+      BatchInsert
       # Start a worker by calling: RinhaBackendElixir.Worker.start_link(arg)
       # {RinhaBackendElixir.Worker, arg}
     ]
